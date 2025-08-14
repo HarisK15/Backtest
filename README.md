@@ -2,6 +2,9 @@
 
 A quantitative trading bot that implements a Moving Average Crossover strategy with backtesting and live trading capabilities.
 
+Live link: https://web-production-6a95b.up.railway.app/
+
+
 ## Features
 
 - **Backtesting Engine**: Historical strategy performance analysis
