@@ -1,0 +1,10 @@
+pandas
+numpy
+scipy
+yfinance
+requests
+websockets
+python-dateutil
+matplotlib
+pytest
+flask
