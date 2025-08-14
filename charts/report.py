@@ -9,20 +9,20 @@ class Report:
         prints a friendly message and returns an empty list.
         """
         try:
-            import matplotlib.pyplot as plt  # lazy import to avoid hard dependency
+            import matplotlib.pyplot as plt  # import here to avoid dependency issues
         except ModuleNotFoundError:
             print("[Charts] matplotlib is not installed. Skipping chart generation.\n"
                   "Install with: pip install matplotlib")
             return []
         paths: list[str] = []
-        # Equity chart
+        # Plot equity curve
         plt.figure()
         equity.plot(title="Equity Curve")
         plt.tight_layout()
         eq_path = outpath.replace(".png","_equity.png")
         plt.savefig(eq_path)
         plt.close(); paths.append(eq_path)
-        # Drawdown chart
+        # Plot drawdown
         plt.figure()
         dd = equity / equity.cummax() - 1.0
         dd.plot(title="Drawdown")

@@ -29,10 +29,8 @@ class YFinanceProvider(DataProvider):
         last = yf.Ticker(symbol).history(period="1d").tail(1)["Close"].iloc[0]
         return {"price": float(last), "ts": datetime.now(timezone.utc)}
 
-# --- True real-time via Alpaca Market Data v2 (websocket) ---
-# Notes:
-# - Requires: ALPACA_API_KEY, ALPACA_API_SECRET env vars.
-# - Provides an async iterator of trades; a thin wrapper is included for convenience.
+# Alpaca websocket for real-time data
+# Need ALPACA_API_KEY and ALPACA_API_SECRET env vars
 import asyncio
 import json
 import websockets
@@ -52,7 +50,7 @@ class AlpacaRealtime:
             await ws.send(json.dumps({"action": "subscribe", "trades": self.symbols}))
             async for msg in ws:
                 data = json.loads(msg)
-                # Each trade event: {"T":"t","S":"AAPL","p":price,"t":timestamp,...}
+                # Trade event format: {"T":"t","S":"AAPL","p":price,"t":timestamp,...}
                 if isinstance(data, list):
                     for ev in data:
                         if ev.get("T") == "t":

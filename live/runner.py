@@ -33,7 +33,7 @@ class LiveTrader:
             rets = self.hist["close"].pct_change().dropna()
             rolling_vol = rets.tail(120).std() if len(rets) > 10 else 0.0
 
-            # Stops
+            # Check stop levels
             if self.pos.qty != 0 and self.stop is not None and self.take is not None:
                 if (price <= self.stop and self.pos.qty > 0) or (price >= self.take and self.pos.qty > 0):
                     qty = abs(self.pos.qty)
@@ -43,7 +43,7 @@ class LiveTrader:
                     self.stop = self.take = None
 
             if current > 0 and self.pos.qty <= 0:
-                qty = max(1, self.risk.position_size(10000.0, price, rolling_vol))  # demo equity estimate
+                qty = max(1, self.risk.position_size(10000.0, price, rolling_vol))  # demo equity
                 fill = self.broker.submit(Order(symbol, Side.BUY, qty, None, ts, tag="live-entry"), ref_price=price)
                 print(f"[Live] BUY {qty} {symbol} @ {fill.fill_price}")
                 self.pos = self.broker.position(symbol)

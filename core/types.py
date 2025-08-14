@@ -13,7 +13,7 @@ class Order:
     symbol: str
     side: Side
     qty: int
-    # For market orders, price=None and you MUST pass a reference price to broker.submit(..., ref_price=...)
+    # Market orders need ref_price in broker.submit()
     price: Optional[float]
     ts: datetime
     tag: str = ""

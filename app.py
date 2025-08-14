@@ -5,7 +5,7 @@ from datetime import datetime
 import pandas as pd
 import os
 
-# Import your existing modules
+# Import our trading modules
 from data.providers import YFinanceProvider
 from strategy.sma_cross import MovingAverageCross
 from risk.manager import RiskManager, RiskConfig
@@ -14,13 +14,13 @@ from backtest.engine import Backtester
 
 app = Flask(__name__)
 
-# Global variables for the trading bot
+# Bot state variables
 trading_bot = None
 bot_status = "stopped"
 bot_thread = None
 trading_history = []
 
-# HTML template for the web interface
+# Web page template
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
@@ -157,22 +157,22 @@ class TradingBot:
         
         while self.running:
             try:
-                # Get latest price
+                # Fetch current price
                 tick = self.data_provider.latest(self.symbol)
                 price = float(tick["price"])
                 ts = tick["ts"]
                 
-                # Update history
+                # Add to price history
                 self.update_history(price, ts)
                 
-                # Generate signals
-                if len(self.history) > 50:  # Need enough data
+                # Check for trading signals
+                if len(self.history) > 50:  # Wait for enough data
                     sig = self.strategy.generate_signals(self.history)
                     current = int(sig.iloc[-1]) if len(sig) else 0
                     
-                    # Trading logic
+                    # Execute trades
                     if current > 0 and self.position.qty <= 0:
-                        # Buy signal
+                        # Place buy order
                         qty = max(1, self.risk_manager.position_size(10000.0, price, 0.02))
                         fill = self.broker.submit(
                             type('Order', (), {
@@ -193,7 +193,7 @@ class TradingBot:
                         print(f"[Web] BUY {qty} {self.symbol} @ {price}")
                         
                     elif current < 0 and self.position.qty > 0:
-                        # Sell signal
+                        # Place sell order
                         qty = abs(self.position.qty)
                         fill = self.broker.submit(
                             type('Order', (), {

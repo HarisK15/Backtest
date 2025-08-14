@@ -52,7 +52,7 @@ def main(argv=None):
                 print(f"{k:<{width}} : {v:.4f}")
             except Exception:
                 print(f"{k:<{width}} : {v}")
-        # Charts (optional)
+        # Generate charts
         if not args.no_charts:
             out = f"report_{args.symbol}_{args.start}_{args.end}.png"
             paths = Report.equity_and_drawdown(res.equity_curve, out)
@@ -63,19 +63,19 @@ def main(argv=None):
 
     elif args.cmd == "live":
         from live.runner import LiveTrader
-        provider = YFinanceProvider()  # polling fallback for demo
+        provider = YFinanceProvider()  # fallback for demo
         strat = MovingAverageCross(args.fast, args.slow)
         risk = RiskManager(RiskConfig())
         broker = PaperBroker() if args.broker == "paper" else AlpacaBroker()
         if args.broker == "alpaca":
-            # Prefer websocket if keys present
+            # Try websocket first
             try:
                 rt = AlpacaRealtime([args.symbol])
                 trader = LiveTrader(provider, broker, strat, risk)
                 asyncio.run(trader.run_websocket(args.symbol, rt.stream_trades()))
                 return
             except Exception as e:
-                print(f"Websocket setup failed ({e}); falling back to polling.")
+                print(f"Websocket failed ({e}), using polling instead.")
         trader = LiveTrader(provider, broker, strat, risk)
         trader.run_polling(args.symbol, args.poll_secs)
 

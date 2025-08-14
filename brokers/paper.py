@@ -14,7 +14,7 @@ class PaperBroker:
         return px + slip if side == Side.BUY else px - slip
 
     def submit(self, order: Order, *, ref_price: float | None = None) -> Fill:
-        # Market order must provide ref_price; limit uses order.price
+        # Market orders need ref_price, limit orders use order.price
         px = order.price if order.price is not None else ref_price
         if px is None:
             raise ValueError("Market order requires ref_price at submit time")

@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 import pandas as pd
 import numpy as np
 
-# Local imports
+# Import our modules
 from ..strategy.sma_cross import MovingAverageCross
 from ..backtest.engine import Backtester
 from ..risk.manager import RiskManager, RiskConfig
@@ -34,7 +34,7 @@ def test_backtester_runs_without_matplotlib():
     bt = Backtester(df, MovingAverageCross(5,20), 10_000.0, PaperBroker(), RiskManager(RiskConfig()))
     res = bt.run("TEST")
     assert isinstance(res.metrics, dict) and len(res.equity_curve) == len(df), "Backtester output shape mismatch"
-    # Chart fallback should not raise even if matplotlib missing
+    # Should handle missing matplotlib gracefully
     try:
         paths = Report.equity_and_drawdown(res.equity_curve, "report_TEST.png")
         assert isinstance(paths, list), "Report should return list of file paths or []"

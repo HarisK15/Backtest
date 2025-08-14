@@ -31,7 +31,7 @@ class Backtester:
         for ts in sig.index:
             s = int(sig.loc[ts].iloc[0])
             price = float(px.loc[ts].iloc[0])
-            # Stop/TP
+            # Check stop loss / take profit
             if pos.qty != 0 and stop is not None and take is not None:
                 if (price <= stop and pos.qty > 0) or (price >= take and pos.qty > 0):
                     qty = abs(pos.qty)
