@@ -13,26 +13,20 @@ A quantitative trading bot that implements a Moving Average Crossover strategy w
 ## Deployment on Railway
 
 ### Prerequisites
-- Railway account (free tier available)
+- Railway account (free tier)
 - GitHub repository
 
 ### Steps
 
-1. **Push to GitHub**
-   ```bash
-   git add .
-   git commit -m "Add web interface for Railway deployment"
-   git push origin main
-   ```
 
-2. **Deploy on Railway**
+ **Deploy on Railway**
    - Go to [Railway.app](https://railway.app)
    - Click "New Project"
    - Select "Deploy from GitHub repo"
    - Choose your repository
    - Railway will automatically detect the Python app and deploy
 
-3. **Environment Variables** (Optional)
+ **Environment Variables** (Optional)
    - `PORT`: Railway sets this automatically
    - `ALPACA_API_KEY`: For live Alpaca trading (optional)
    - `ALPACA_API_SECRET`: For live Alpaca trading (optional)
@@ -59,7 +53,7 @@ python app.py
 # Open http://localhost:8080
 ```
 
-## Usage
+## Trading bot usage:
 
 ### Web Interface
 - **Start Trading**: Begin live paper trading
@@ -84,14 +78,11 @@ python3 -m cli live --symbol AAPL --broker paper --poll-secs 5
 - Death Cross (fast < slow) = SELL signal
 - Risk management with stop-losses and take-profits
 
-## Architecture
-
-- **Data Layer**: Yahoo Finance provider
-- **Strategy Layer**: Moving Average Crossover
-- **Risk Layer**: Position sizing and stop management
-- **Execution Layer**: Paper trading broker
-- **Web Layer**: Flask dashboard
 
 ## License
 
-MIT License - Use at your own risk for educational purposes only.
+MIT License.
+
+
+Author:
+Haris Kamran
